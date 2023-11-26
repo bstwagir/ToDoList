@@ -1,0 +1,99 @@
+<div class="container-fluid bg-light">
+    <div class="container bg-light">
+
+        <div class="row mt-4" style="height: 500px;">
+            <div class="col"></div>
+            <div class="col-md-6 bg-white shadow">
+
+                <div class="card bg-warning mt-4">
+                    <h4 class="text-white p-3 pt-2 pb-2">To Do App - Software devlopment</h4>
+                </div>
+
+                <div class="shadow">
+                    <div class="input-group p-4">
+                        <input type="text" class="form-control" placeholder="Enter task " name="task" [(ngModel)]="addTaskValue">
+                        <input type="text" class="form-control" placeholder="Enter category " name="category" [(ngModel)]="addTaskCategory">
+                        <button class="btn btn-outline-success" type="button" (click)="addTask()">+</button>
+                      </div>
+                </div>
+
+                <h4 class="text-primary mt-4">Tasks : </h4>
+                <div class="upper-section d-flex flex-column-reverse flex-sm-row">
+                    <div class="header">
+                      <mat-form-field class="table-input" appearance="outline">
+                        <mat-label>Search</mat-label>
+                        <input
+                          matInput
+                          (keyup)="applyFilter($any($event.target).value)"
+                          [(ngModel)]="searchValue"
+                        />
+                      </mat-form-field>
+                      <mat-form-field appearance="outline" class="ms-sm-2">
+                        <mat-label>Filter By</mat-label>
+                        <mat-select
+                          (selectionChange)="filterChange($event)"
+                        >
+                          <mat-option value="all">All</mat-option>
+                          <mat-option value="enabled">Important</mat-option>
+                          <mat-option value="disabled">Not Important</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                </div>
+                <hr />
+                <div style="overflow-y: auto; height: 500px;">
+                    <div class="m-3" *ngFor="let task of filteredTaskArr">
+                        <div class="p-2 shadow border" id="tasks" [class.important]="task.urgent" >
+                            <div class="input-group row ps-3" >
+                                <input type="checkbox" class="float-sm-start col-10" placeholder="Enter category " value="false" name="category" [(ngModel)]="task.done" (click)="taskDone(task)">
+                                <mat-slide-toggle
+            class="custom-slide-toggle"
+            [checked]="task.urgent"
+            [disabled]="isToggleDisabled && idToToogle === task.id"
+            (change)= "urgent = !urgent"
+            (click)= "toggleItemState(task)"
+          >
+            <span>{{
+              task.urgent
+                ? "Important"
+                : "Not Important"
+            }}</span></mat-slide-toggle
+          >
+                                <div class="row" [class.centered]="task.done">
+                                <div class="card col-md-10 mt-2 border-0 bg-transparent"> {{task.task_name}} </div>
+                                <div class="card col-md-10 mt-2 border-0 bg-transparent"> {{task.task_category}} </div>
+                                </div>
+                                <button class="btn btn-outline-primary col me-2" data-bs-toggle="modal" type="button" data-bs-target="#exampleModal" (click)="call(task)">
+                                    <i class="fas fa-pencil-alt"></i>
+                                  </button>                                  
+                                <div class="btn btn-outline-danger col" (click)="deleteTask(task)" >X</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit Task</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="input-group p-4">
+                                <input type="text" class="form-control" placeholder="Enter task " name="task" [(ngModel)]="editTaskValue">
+                                <input type="text" class="form-control" placeholder="Enter Category " name="task" [(ngModel)]="editTaskCategory">
+                                <button class="btn btn-outline-success" type="button" data-bs-dismiss="modal" (click)="editTask()">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col"></div>
+
+        </div>
+
+    </div>
+</div>
