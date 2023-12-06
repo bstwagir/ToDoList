@@ -30,8 +30,6 @@ export class CrudService {
     return this.http.put<Task>(this.serviceURL+'/'+task.id,task);
   }
   editDone(task : Task) : Observable<Task> {
-    console.log(task.done, task, 'service');
-    
     return this.http.put<Task>(this.serviceURL+'/'+task.id,{
       task_name:task.task_name,
       task_category: task.task_category,
@@ -40,7 +38,6 @@ export class CrudService {
     });
   }
   editUrgent(task : Task) : Observable<Task> {
-    console.log(task.done, task, 'service');
     
     return this.http.put<Task>(this.serviceURL+'/'+task.id,{
       task_name:task.task_name,

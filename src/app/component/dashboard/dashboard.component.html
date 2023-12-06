@@ -6,17 +6,29 @@
             <div class="col-md-6 bg-white shadow">
 
                 <div class="card bg-warning mt-4">
-                    <h4 class="text-white p-3 pt-2 pb-2">To Do App - Software devlopment</h4>
+                    <h4 class="text-white p-3 pt-2 pb-2">ToDo List App - Software devlopment Project</h4>
                 </div>
 
                 <div class="shadow">
                     <div class="input-group p-4">
-                        <input type="text" class="form-control" placeholder="Enter task " name="task" [(ngModel)]="addTaskValue">
-                        <input type="text" class="form-control" placeholder="Enter category " name="category" [(ngModel)]="addTaskCategory">
-                        <button class="btn btn-outline-success" type="button" (click)="addTask()">+</button>
+                        <form class= "row mx-auto" #taskForm="ngForm" (ngSubmit)="addTask()">
+                        <mat-form-field class="w-50">
+                            <input matInput type="text" placeholder="Enter task " name="task" [(ngModel)]="addTaskValue" required>
+                            <mat-error
+              *ngIf="!taskForm.valid"
+              class="m-0"
+            >
+              <strong>Must be filled</strong>
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field class="w-50">
+                            <input matInput="text" placeholder="Enter category " name="category" [(ngModel)]="addTaskCategory">
+                        </mat-form-field>
+                            <button mat-raised-button class="btn btn-outline-success" type="submit" [disabled]="!taskForm.valid">SUBMIT</button>
+                            
+                        </form>
                       </div>
                 </div>
-
                 <h4 class="text-primary mt-4">Tasks : </h4>
                 <div class="upper-section d-flex flex-column-reverse flex-sm-row">
                     <div class="header">
@@ -42,36 +54,64 @@
                 </div>
                 <hr />
                 <div style="overflow-y: auto; height: 500px;">
-                    <div class="m-3" *ngFor="let task of filteredTaskArr">
-                        <div class="p-2 shadow border" id="tasks" [class.important]="task.urgent" >
-                            <div class="input-group row ps-3" >
-                                <input type="checkbox" class="float-sm-start col-10" placeholder="Enter category " value="false" name="category" [(ngModel)]="task.done" (click)="taskDone(task)">
-                                <mat-slide-toggle
-            class="custom-slide-toggle"
-            [checked]="task.urgent"
-            [disabled]="isToggleDisabled && idToToogle === task.id"
-            (change)= "urgent = !urgent"
-            (click)= "toggleItemState(task)"
-          >
-            <span>{{
-              task.urgent
-                ? "Important"
-                : "Not Important"
-            }}</span></mat-slide-toggle
-          >
-                                <div class="row" [class.centered]="task.done">
-                                <div class="card col-md-10 mt-2 border-0 bg-transparent"> {{task.task_name}} </div>
-                                <div class="card col-md-10 mt-2 border-0 bg-transparent"> {{task.task_category}} </div>
+                    <div class="mx-auto " *ngFor="let task of filteredTaskNotCompleted">
+                        <div class="p-2 shadow border mb-1" id="tasks" [class.important]="task.urgent" >
+                            <div class="card-display" >
+                                <input type="checkbox" class="w-10" value="false" name="category" [(ngModel)]="task.done" (click)="taskDone(task)">
+                                    <mat-slide-toggle
+                                        class="urgent"
+                                        style="transform: scale(0.7)"
+                                        [checked]="task.urgent"
+                                        [disabled]="isToggleDisabled && idToToogle === task.id"
+                                        (change)= "urgent = !urgent"
+                                        (click)= "toggleItemState(task)"
+                                        >
+                                        <span style="font-size: 15px;">Important</span></mat-slide-toggle
+                                        >
+                                <div class="content row" [class.completed]="task.done">
+                                <div class="col mt-2 border-0 bg-transparent"> <strong>{{task.task_name}}</strong></div>
+                                <div class="col mt-2 border-0 bg-transparent"> <strong>{{task.task_category}}</strong></div>
                                 </div>
                                 <button class="btn btn-outline-primary col me-2" data-bs-toggle="modal" type="button" data-bs-target="#exampleModal" (click)="call(task)">
                                     <i class="fas fa-pencil-alt"></i>
                                   </button>                                  
-                                <div class="btn btn-outline-danger col" (click)="deleteTask(task)" >X</div>
+                                <div class="btn btn-outline-danger col" (click)="deleteTask(task)" ><i class="fas fa-trash"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr />
+
+                    
+                <h4 class="text-primary" *ngIf="!isEmpty">Completed Tasks : </h4>
+                    <div class="mx-auto " *ngFor="let task of filteredTaskCompleted">
+                        <div class="p-2 shadow border mb-1" id="tasks" [class.important]="task.urgent" >
+                            <div class="card-display" >
+                                <input type="checkbox" class="w-10" value="false" name="category" [(ngModel)]="task.done" (click)="taskDone(task)">
+                                    <mat-slide-toggle
+                                        class="urgent"
+                                        style="transform: scale(0.7)"
+                                        [checked]="task.urgent"
+                                        [disabled]="isToggleDisabled && idToToogle === task.id"
+                                        (change)= "urgent = !urgent"
+                                        (click)= "toggleItemState(task)"
+                                        >
+                                        <span style="font-size: 15px;">Important</span></mat-slide-toggle
+                                        >
+                                <div class="content row" [class.completed]="task.done">
+                                <div class="col mt-2 border-0 bg-transparent"> <strong>{{task.task_name}}</strong></div>
+                                <div class="col mt-2 border-0 bg-transparent"> <strong>{{task.task_category}}</strong></div>
+                                </div>
+                                <button class="btn btn-outline-primary col me-2" data-bs-toggle="modal" type="button" data-bs-target="#exampleModal" (click)="call(task)">
+                                    <i class="fas fa-pencil-alt"></i>
+                                  </button>                                  
+                                <div class="btn btn-outline-danger col" (click)="deleteTask(task)" ><i class="fas fa-trash"></i></div>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
+
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                     <div class="modal-content">
